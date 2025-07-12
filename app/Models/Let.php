@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Rezervacija;
 
 class Let extends Model
 {
@@ -15,4 +16,8 @@ class Let extends Model
         'broj_mesta',
         'cena',
     ];
+    public function rezervacije()
+    {
+        return $this->hasMany(Rezervacija::class);
+    }
 }

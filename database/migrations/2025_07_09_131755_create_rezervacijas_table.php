@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rezervacijas', function (Blueprint $table) {
-            $table->id();
-             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // korisnik koji rezerviše
-        $table->foreignId('let_id')->constrained('lets')->onDelete('cascade'); // povezano sa letom
-        $table->integer('broj_karata');
-        $table->decimal('ukupna_cena', 10, 2);
-            $table->timestamps();
+         Schema::create('rezervacijas', function (Blueprint $table) {
+        $table->id();
+        $table->string('ime_putnika');
+        $table->string('email');
+        $table->integer('broj_sedista');
+
+        $table->foreignId('let_id')->constrained('lets')->onDelete('cascade');
+
+        $table->timestamps();
         });
     }
 
