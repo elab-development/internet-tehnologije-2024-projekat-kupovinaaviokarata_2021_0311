@@ -41,6 +41,23 @@ public function store(Request $request)
 }
 
 
+public function destroy($id)
+{
+    $rezervacija = Rezervacija::find($id);
+
+    if (!$rezervacija) {
+        return response()->json([
+            'error' => 'Rezervacija nije pronađena.'], 404);
+    }
+
+    $rezervacija->delete();
+
+    return response()->json(['message' => 'Rezervacija uspešno obrisana.'], 200);
+}
+
+
+
+
     public function index()
     {
         return Rezervacija::with('let')->get();
