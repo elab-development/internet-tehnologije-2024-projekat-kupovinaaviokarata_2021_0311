@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Let;
 use Illuminate\Http\Request;
 use App\Models\Rezervacija;
 use Illuminate\Support\Facades\DB;
@@ -18,8 +19,21 @@ class RezervacijaController extends Controller
                 'let_id' => 'required|exists:lets,id',
             ]);
 
+
+
+
+            $let = Let::find($validated['let_id']);
+
+if ($validated['broj_sedista'] > $let->broj_mesta) {
+    return response()->json([
+        'error' => 'Uneti broj sedišta premašuje kapacitet leta.'
+    ], 400);
+}
+
+
+
             $rezervacija = DB::transaction(function () use ($validated) {
-                // Zaključavamo sve rezervacije za dati let
+               
                 $zauzeto = Rezervacija::where('let_id', $validated['let_id'])
                     ->where('broj_sedista', $validated['broj_sedista'])
                     ->lockForUpdate()
