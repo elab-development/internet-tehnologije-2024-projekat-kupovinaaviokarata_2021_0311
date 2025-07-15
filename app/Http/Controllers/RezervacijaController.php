@@ -65,7 +65,7 @@ if ($validated['broj_sedista'] > $let->broj_mesta) {
 
         if (!$rezervacija) {
             return response()->json([
-                'error' => 'Rezervacija nije pronađena.'
+                'error' => 'Rezervacija nije pronadjena.'
             ], 404);
         }
 
@@ -73,5 +73,26 @@ if ($validated['broj_sedista'] > $let->broj_mesta) {
 
         return response()->json(['message' => 'Rezervacija uspešno obrisana.'], 200);
     }
+
+
+public function show($id)
+{
+    $rezervacija = Rezervacija::with('let')->find($id);
+
+    if (!$rezervacija) {
+        return response()->json([
+            'error' => 'Rezervacija nije pronadjena.'
+        ], 404);
+    }
+
+    return response()->json($rezervacija);
+}
+
+
+
+
+
+
+
 
 }

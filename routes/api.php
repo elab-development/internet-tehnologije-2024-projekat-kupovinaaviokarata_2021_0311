@@ -9,3 +9,4 @@ Route::apiResource('letovi', LetController::class);
 Route::post('/rezervacije', [RezervacijaController::class, 'store']);
 Route::get('/rezervacije', [RezervacijaController::class, 'index']);
 Route::delete('/rezervacije/{id}', [RezervacijaController::class, 'destroy']);
+Route::get('/rezervacije/{id}', [RezervacijaController::class, 'show']);
