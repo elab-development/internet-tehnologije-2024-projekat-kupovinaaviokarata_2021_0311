@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\LockedSeat;
+use App\Models\Let;
+use App\Models\Rezervacija;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class LockedSeatController extends Controller
 
@@ -39,4 +43,39 @@ class LockedSeatController extends Controller
         'lock' => $lock,
     ], 201);
 }
+
+
+public function slobodnaSedista(Request $request)
+{
+    $letId = $request->query('let_id');
+
+    if (!$letId) {
+        return response()->json(['error' => 'Let ID je obavezan parametar.'], 400);
+    }
+
+    $let = Let::find($letId);
+    if (!$let) {
+        return response()->json(['error' => 'Let nije pronađen.'], 404);
+    }
+
+    $svaSedista = range(1, $let->broj_mesta);
+
+    $rezervisana = Rezervacija::where('let_id', $letId)->pluck('broj_sedista')->toArray();
+
+    $zakljucana = LockedSeat::where('let_id', $letId)
+        ->where('locked_until', '>', now())
+        ->pluck('broj_sedista')
+        ->toArray();
+
+    $slobodna = array_values(array_diff($svaSedista, $rezervisana, $zakljucana));
+
+    return response()->json([
+        'let_id' => $letId,
+        'slobodna_sedista' => $slobodna
+    ]);
+}
+
+
+
+
 }

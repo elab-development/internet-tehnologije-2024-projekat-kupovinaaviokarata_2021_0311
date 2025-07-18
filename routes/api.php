@@ -12,3 +12,4 @@ Route::get('/rezervacije', [RezervacijaController::class, 'index']);
 Route::delete('/rezervacije/{id}', [RezervacijaController::class, 'destroy']);
 Route::get('/rezervacije/{id}', [RezervacijaController::class, 'show']);
 Route::post('/zakljucaj-sediste', [\App\Http\Controllers\LockedSeatController::class, 'lock']);
+Route::get('/slobodna-sedista', [LockedSeatController::class, 'slobodnaSedista']);
