@@ -20,4 +20,6 @@ class Let extends Model
     {
         return $this->hasMany(Rezervacija::class);
     }
+
+
 }
