@@ -42,26 +42,33 @@ class AuthController extends Controller
         ], 500);
     }
 }
+
+
     public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+{
+    
+    $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string',
+    ]);
 
-        $user = User::where('email', $request->email)->first();
+   
+    $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
-        }
-
+    // Provera lozinke
+    if (!$user || !Hash::check($request->password, $user->password)) {
         return response()->json([
-            'token' => $user->createToken('token')->plainTextToken,
-            'user' => $user,
-        ]);
+            'message' => 'Invalid login credentials'
+        ], 401);
     }
+
+    
+    return response()->json([
+        'token' => $user->createToken('auth_token')->plainTextToken,
+        'user' => $user,
+    ]);
+}
+
 
     public function logout(Request $request)
     {
