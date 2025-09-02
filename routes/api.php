@@ -18,19 +18,19 @@ Route::get('/letovi/{id}', [LetController::class, 'show']);
 Route::get('/slobodna-sedista', [LockedSeatController::class, 'slobodnaSedista']);
 
 
-
-
-
-
-
 Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
 
-    Route::middleware('role:admin')->group(function () {
-        Route::apiResource('letovi', LetController::class)->only(['store','update','destroy']);
-    });
+Route::middleware('role:admin')->group(function () {
+    Route::apiResource('letovi', LetController::class)->only(['store','update','destroy']);
+
+    
+    Route::get('/admin/rezervacije', [RezervacijaController::class, 'index']);
+    Route::get('/admin/rezervacije/{id}', [RezervacijaController::class, 'show']);
+});
+
 
 
   //  Route::apiResource('letovi', LetController::class)->only(['store','update','destroy']);

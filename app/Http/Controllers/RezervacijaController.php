@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class RezervacijaController extends Controller
 {
+
     public function store(Request $request)
     {
         try {
@@ -19,21 +20,18 @@ class RezervacijaController extends Controller
                 'let_id' => 'required|exists:lets,id',
             ]);
 
+            $let = Let::findOrFail($validated['let_id']);
 
+            if ($validated['broj_sedista'] > $let->broj_mesta) {
+                return response()->json([
+                    'error' => 'Uneti broj sedišta premašuje kapacitet leta.'
+                ], 400);
+            }
 
-
-            $let = Let::find($validated['let_id']);
-
-if ($validated['broj_sedista'] > $let->broj_mesta) {
-    return response()->json([
-        'error' => 'Uneti broj sedišta premašuje kapacitet leta.'
-    ], 400);
-}
-
-
+          
+            $validated['user_id'] = $request->user()->id;
 
             $rezervacija = DB::transaction(function () use ($validated) {
-               
                 $zauzeto = Rezervacija::where('let_id', $validated['let_id'])
                     ->where('broj_sedista', $validated['broj_sedista'])
                     ->lockForUpdate()
@@ -46,7 +44,11 @@ if ($validated['broj_sedista'] > $let->broj_mesta) {
                 return Rezervacija::create($validated);
             });
 
+
+            $rezervacija->load('let', 'user');
+
             return response()->json($rezervacija, 201);
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
@@ -54,45 +56,54 @@ if ($validated['broj_sedista'] > $let->broj_mesta) {
         }
     }
 
-    public function index()
+
+    public function index(Request $request)
     {
-        return Rezervacija::with('let')->get();
+        if ($request->user()->role === 'admin') {
+       
+            $rezervacije = Rezervacija::with('let', 'user')->get();
+        } else {
+           
+            $rezervacije = Rezervacija::where('user_id', $request->user()->id)
+                                      ->with('let')
+                                      ->get();
+        }
+
+        return response()->json($rezervacije);
     }
 
-    public function destroy($id)
+    public function show($id, Request $request)
+    {
+        
+$rezervacija = Rezervacija::with('let', 'user')->find($id);
+
+        if (!$rezervacija) {
+            return response()->json(['error' => 'Rezervacija nije pronadjena.'], 404);
+        }
+
+        if ($request->user()->role !== 'admin' && $rezervacija->user_id !== $request->user()->id) {
+            return response()->json(['error' => 'Forbidden'], 403);
+        }
+
+        return response()->json($rezervacija);
+        
+    }
+
+    
+    public function destroy($id, Request $request)
     {
         $rezervacija = Rezervacija::find($id);
 
         if (!$rezervacija) {
-            return response()->json([
-                'error' => 'Rezervacija nije pronadjena.'
-            ], 404);
+            return response()->json(['error' => 'Rezervacija nije pronadjena.'], 404);
+        }
+
+        if ($request->user()->role !== 'admin' && $rezervacija->user_id !== $request->user()->id) {
+            return response()->json(['error' => 'Forbidden'], 403);
         }
 
         $rezervacija->delete();
 
         return response()->json(['message' => 'Rezervacija uspešno obrisana.'], 200);
     }
-
-
-public function show($id)
-{
-    $rezervacija = Rezervacija::with('let')->find($id);
-
-    if (!$rezervacija) {
-        return response()->json([
-            'error' => 'Rezervacija nije pronadjena.'
-        ], 404);
-    }
-
-    return response()->json($rezervacija);
-}
-
-
-
-
-
-
-
-
 }
