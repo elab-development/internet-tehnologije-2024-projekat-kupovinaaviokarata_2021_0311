@@ -13,7 +13,102 @@ class LockedSeatController extends Controller
 
 {
 
-    public function lock(Request $request)
+public function lock(Request $request)
+{
+    $validated = $request->validate([
+        'let_id' => 'required|exists:lets,id',
+        'broj_sedista' => 'required|integer|min:1',
+        'trajanje_min' => 'nullable|integer|min:5|max:30',
+    ]);
+
+    $letId = (int)$validated['let_id'];
+    $brojSedista = (int)$validated['broj_sedista'];
+    $ttlMin = (int)($validated['trajanje_min'] ?? 5);
+    $now = now();
+    $until = (clone $now)->addMinutes($ttlMin);
+
+   
+    $rezervisanoPostoji = \App\Models\Rezervacija::where('let_id', $letId)
+        ->where('broj_sedista', $brojSedista)
+        ->exists();
+    if ($rezervisanoPostoji) {
+        return response()->json(['error' => 'Sedište je već rezervisano.'], 409);
+    }
+
+    try {
+        return DB::transaction(function () use ($letId, $brojSedista, $now, $until) {
+           
+            $postojeci = LockedSeat::where('let_id', $letId)
+                ->where('broj_sedista', $brojSedista)
+                ->lockForUpdate()
+                ->first();
+
+            if ($postojeci) {
+                
+                if ($postojeci->locked_until && $postojeci->locked_until->greaterThan($now)) {
+                    return response()->json([
+                        'error' => 'Sedište je već privremeno zaključano.'
+                    ], 409);
+                }
+
+             
+                $postojeci->locked_until = $until;
+                $postojeci->save();
+
+                return response()->json([
+                    'message' => "Sedište je ponovo zaključano na {$until->diffInMinutes($now)} minuta.",
+                    'lock' => $postojeci,
+                ], 200);
+            }
+
+         
+            $lock = LockedSeat::create([
+                'let_id' => $letId,
+                'broj_sedista' => $brojSedista,
+                'locked_until' => $until,
+            ]);
+
+            return response()->json([
+                'message' => "Sedište je uspešno zaključano na {$until->diffInMinutes($now)} minuta.",
+                'lock' => $lock,
+            ], 201);
+        });
+    } catch (\Illuminate\Database\QueryException $e) {
+
+        if ((int)($e->errorInfo[1] ?? 0) === 1062) { 
+            return response()->json([
+                'error' => 'Sedište je već privremeno zaključano.',
+            ], 409);
+        }
+        throw $e; 
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   /* public function lock(Request $request)
 {
     $validated = $request->validate([
         'let_id' => 'required|exists:lets,id',
@@ -43,6 +138,14 @@ class LockedSeatController extends Controller
         'lock' => $lock,
     ], 201);
 }
+
+*/
+
+
+
+
+
+
 
 
 public function slobodnaSedista(Request $request)
