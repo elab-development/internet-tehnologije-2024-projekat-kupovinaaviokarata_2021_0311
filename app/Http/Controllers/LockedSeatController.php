@@ -86,28 +86,6 @@ public function lock(Request $request)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    /* public function lock(Request $request)
 {
     $validated = $request->validate([
@@ -142,12 +120,6 @@ public function lock(Request $request)
 */
 
 
-
-
-
-
-
-
 public function slobodnaSedista(Request $request)
 {
     $letId = $request->query('let_id');
@@ -178,6 +150,14 @@ public function slobodnaSedista(Request $request)
     ]);
 }
 
+public function cleanupExpired()
+{
+    $deleted = LockedSeat::where('locked_until', '<', now())->delete();
+
+    return response()->json([
+        'message' => "Obrisano je $deleted isteklih lockova."
+    ]);
+}
 
 
 

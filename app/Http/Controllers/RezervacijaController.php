@@ -10,7 +10,65 @@ use Illuminate\Support\Facades\DB;
 class RezervacijaController extends Controller
 {
 
-    public function store(Request $request)
+public function store(Request $request)
+{
+    try {
+        $validated = $request->validate([
+            'ime_putnika'   => 'required|string',
+            'email'         => 'required|email',
+            'broj_sedista'  => 'required|integer',
+            'let_id'        => 'required|exists:lets,id',
+        ]);
+
+        $let = Let::findOrFail($validated['let_id']);
+
+        if ($validated['broj_sedista'] > $let->broj_mesta) {
+            return response()->json([
+                'error' => 'Uneti broj sedišta premašuje kapacitet leta.'
+            ], 400);
+        }
+
+        $validated['user_id'] = $request->user()->id;
+
+        $rezervacija = DB::transaction(function () use ($validated) {
+            
+            $zauzeto = Rezervacija::where('let_id', $validated['let_id'])
+                ->where('broj_sedista', $validated['broj_sedista'])
+                ->lockForUpdate()
+                ->exists();
+
+            if ($zauzeto) {
+                throw new \Exception('Sedište je već rezervisano za ovaj let.');
+            }
+
+            $lock = \App\Models\LockedSeat::where('let_id', $validated['let_id'])
+                ->where('broj_sedista', $validated['broj_sedista'])
+                ->where('locked_until', '>', now())
+                ->first();
+
+            if (!$lock) {
+                throw new \Exception('Sedište nije zaključano ili je lock istekao.');
+            }
+
+           
+            $lock->delete();
+
+            return Rezervacija::create($validated);
+        });
+
+        $rezervacija->load('let', 'user');
+
+        return response()->json($rezervacija, 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+        ], 400);
+    }
+}
+
+
+   /* public function store(Request $request)
     {
         try {
             $validated = $request->validate([
@@ -32,6 +90,21 @@ class RezervacijaController extends Controller
             $validated['user_id'] = $request->user()->id;
 
             $rezervacija = DB::transaction(function () use ($validated) {
+
+                 $lock = \App\Models\LockedSeat::where('let_id', $validated['let_id'])
+                ->where('broj_sedista', $validated['broj_sedista'])
+                ->where('locked_until', '>', now())
+                ->first();
+
+
+                  if (!$lock) {
+                throw new \Exception('Sedište nije zaključano ili je lock istekao.');
+            }
+
+            if($lock) {
+                $lock->delete();
+            }
+
                 $zauzeto = Rezervacija::where('let_id', $validated['let_id'])
                     ->where('broj_sedista', $validated['broj_sedista'])
                     ->lockForUpdate()
@@ -41,7 +114,13 @@ class RezervacijaController extends Controller
                     throw new \Exception('Sedište je već rezervisano za ovaj let.');
                 }
 
-                return Rezervacija::create($validated);
+
+                 $rezervacija = Rezervacija::create($validated);
+                  $lock->delete();
+
+
+
+                return $rezervacija;
             });
 
 
@@ -55,7 +134,7 @@ class RezervacijaController extends Controller
             ], 400);
         }
     }
-
+*/
 
     public function index(Request $request)
     {
