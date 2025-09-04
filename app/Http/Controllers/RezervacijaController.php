@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 
+
 class RezervacijaController extends Controller
 {
 
@@ -137,19 +138,74 @@ public function store(Request $request)
 */
 
     public function index(Request $request)
-    {
-        if ($request->user()->role === 'admin') {
-       
-            $rezervacije = Rezervacija::with('let', 'user')->get();
-        } else {
-           
-            $rezervacije = Rezervacija::where('user_id', $request->user()->id)
-                                      ->with('let')
-                                      ->get();
-        }
+   {
+    // Dozvoljena polja za sortiranje
+    $allowedSort = ['created_at', 'ime_putnika', 'email', 'broj_sedista'];
 
-        return response()->json($rezervacije);
+    $sortBy  = in_array($request->get('sort_by'), $allowedSort, true)
+        ? $request->get('sort_by')
+        : 'created_at';
+
+    $sortDir = strtolower($request->get('sort_dir')) === 'asc' ? 'asc' : 'desc';
+
+    $perPage = (int) $request->get('per_page', 10);
+    if ($perPage < 1)   $perPage = 10;
+    if ($perPage > 100) $perPage = 100;
+
+    $query = Rezervacija::query()->with('let', 'user');
+
+    // Admin vidi sve, user samo svoje
+    if ($request->user()->role !== 'admin') {
+        $query->where('user_id', $request->user()->id);
     }
+
+    // --- Filteri ---
+    if ($request->filled('let_id')) {
+        $query->where('let_id', (int) $request->get('let_id'));
+    }
+
+    if ($request->filled('email')) {
+        $query->where('email', 'like', '%' . $request->get('email') . '%');
+    }
+
+    if ($request->filled('ime_putnika')) {
+        $query->where('ime_putnika', 'like', '%' . $request->get('ime') . '%');
+    }
+
+    if ($request->filled('broj_sedista')) {
+        $query->where('broj_sedista', (int) $request->get('seat'));
+    }
+
+    if ($request->filled('date_from')) {
+        $query->whereDate('created_at', '>=', $request->get('date_from'));
+    }
+
+    if ($request->filled('date_to')) {
+        $query->whereDate('created_at', '<=', $request->get('date_to'));
+    }
+
+    $query->orderBy($sortBy, $sortDir);
+
+    $rez = $query->paginate($perPage)->appends($request->query());
+
+    return response()->json([
+        'data' => $rez->items(),
+        'meta' => [
+            'current_page' => $rez->currentPage(),
+            'per_page'     => $rez->perPage(),
+            'total'        => $rez->total(),
+            'last_page'    => $rez->lastPage(),
+            'sort_by'      => $sortBy,
+            'sort_dir'     => $sortDir,
+        ],
+        'links' => [
+            'first' => $rez->url(1),
+            'last'  => $rez->url($rez->lastPage()),
+            'prev'  => $rez->previousPageUrl(),
+            'next'  => $rez->nextPageUrl(),
+        ],
+    ]);
+}
     public function show($id, Request $request)
     {
         $rezervacija = Rezervacija::with('let', 'user')->find($id);
@@ -210,7 +266,7 @@ public function store(Request $request)
 
         // Validacija
         $validated = $request->validate([
-            'ime_putnika' => 'sometimes|string',
+            'ime_putnika' => 'sometimes|nullable|string',
             'email' => 'sometimes|email',
             'broj_sedista' => 'sometimes|integer',
         ]);

@@ -18,7 +18,21 @@ Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me',      [AuthController::class, 'me']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/letovi', [LetController::class,'store']);
+    Route::put('/letovi/{id}', [LetController::class, 'update']);
+    Route::delete('/letovi/{id}', [LetController::class, 'destroy']);
+    Route::get('/rezervacije', [RezervacijaController::class, 'index']);      
+    Route::get('/rezervacije/{id}', [RezervacijaController::class, 'show']);
+    Route::post('/rezervacije', [RezervacijaController::class, 'store']);
+    Route::put('/rezervacije/{id}', [RezervacijaController::class, 'update']);
+    Route::delete('/rezervacije/{id}', [RezervacijaController::class, 'destroy']);
+});
+
+
  
+    /*
 Route::middleware('role:admin')->group(function () {
     Route::apiResource('letovi', LetController::class)->only(['store','update','destroy']);
     Route::get('/admin/rezervacije', [RezervacijaController::class, 'index']);
@@ -34,7 +48,7 @@ Route::middleware('role:user')->group(function () {
         Route::post('/zakljucaj-sediste', [LockedSeatController::class, 'lock']);
         Route::put('/rezervacije/{id}', [RezervacijaController::class, 'update']);
     });
-
+*/
       //Route::put('/rezervacije/{id}', [RezervacijaController::class, 'update']);
       
 
