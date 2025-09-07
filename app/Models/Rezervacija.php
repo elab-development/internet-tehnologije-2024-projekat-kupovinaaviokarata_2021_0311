@@ -13,7 +13,9 @@ class Rezervacija extends Model
         'email',
         'broj_sedista',
         'let_id',
-        'user_id'
+        'user_id',
+        'broj_karata',
+        'ukupna_cena'
     ];
 
     public function let()

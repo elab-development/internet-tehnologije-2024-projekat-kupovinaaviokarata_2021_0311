@@ -18,7 +18,11 @@ return new class extends Migration
         $table->integer('broj_sedista');
 
         $table->foreignId('let_id')->constrained('lets')->onDelete('cascade');
+        $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
+        $table->integer('broj_karata')->default(1);
+        $table->decimal('ukupna_cena', 10, 2)->nullable();
+        
         $table->timestamps();
         });
     }
