@@ -7,7 +7,7 @@ const Header = () => {
       <h1 className="font-bold text-xl">Kupovina Avio Karata</h1>
       <nav>
         <Link className="mr-4 hover:underline" to="/">Početna</Link>
-        <Link className="hover:underline" to="/search">Rezultati</Link>
+        <Link className="hover:underline" to="/rezultati">Rezultati</Link>
       </nav>
     </header>
   );

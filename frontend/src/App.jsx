@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Layout/Header";
@@ -8,13 +7,11 @@ import SearchResults from "./pages/SearchResults";
 function App() {
   return (
     <Router>
-      <Header />
-      <main className="p-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/search" element={<SearchResults />} />
-        </Routes>
-      </main>
+      <Header /> {/* Header će biti vidljiv na svim stranicama */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/rezultati" element={<SearchResults />} />
+      </Routes>
     </Router>
   );
 }
