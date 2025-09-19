@@ -1,5 +1,6 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
+
 
 const SearchResults = () => {
   const location = useLocation();
@@ -21,6 +22,14 @@ const SearchResults = () => {
               <div>Vreme poletanja: {letData.vreme_poletanja.split(" ")[1]}</div>
               <div>Vreme sletanja: {letData.vreme_sletanja.split(" ")[1]}</div>
               <div>Cena: {letData.cena} EUR</div>
+
+                <Link
+                to={`/letovi/${letData.id}`}
+                className="text-blue-500 underline mt-2 inline-block"
+              >
+                Pogledaj detalje
+              </Link>
+
             </li>
           ))}
         </ul>
