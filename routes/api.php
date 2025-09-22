@@ -28,6 +28,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/rezervacije', [RezervacijaController::class, 'store']);
     Route::put('/rezervacije/{id}', [RezervacijaController::class, 'update']);
     Route::delete('/rezervacije/{id}', [RezervacijaController::class, 'destroy']);
+    Route::post('/zakljucaj-sediste', [LockedSeatController::class, 'lock']);
+
+
+
+
 });
 
 
@@ -55,10 +60,11 @@ Route::middleware('role:user')->group(function () {
 });
 
 
-Route::get('/slobodna-sedista', [LockedSeatController::class, 'slobodnaSedista']);
+
+
+Route::get('/slobodna-sedista', [LetController::class, 'slobodnaSedista']);
 Route::delete('/locked-seats/cleanup', [LockedSeatController::class, 'cleanupExpired']);
-
-
+//Route::post('/lock-seat', [LockedSeatController::class, 'lock']); 
 
 
 

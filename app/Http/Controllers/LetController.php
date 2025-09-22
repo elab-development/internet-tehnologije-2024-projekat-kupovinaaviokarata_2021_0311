@@ -133,4 +133,36 @@ class LetController extends Controller
     return response()->json(['message' => 'Let obrisan']);
 }
 
+public function slobodnaSedista(Request $request)
+{
+    $validated = $request->validate([
+        'let_id' => 'required|exists:lets,id',
+    ]);
+
+    $letId = (int)$validated['let_id'];
+    $let = Let::findOrFail($letId);
+    $ukupnoMesta = $let->broj_mesta;
+
+    $now = now();
+
+    $zauzeta = \App\Models\Rezervacija::where('let_id', $letId)
+        ->pluck('broj_sedista')
+        ->toArray();
+
+    $zakljucana = \App\Models\LockedSeat::where('let_id', $letId)
+        ->where('locked_until', '>', $now)
+        ->pluck('broj_sedista')
+        ->toArray();
+
+    $svaMesta = range(1, $ukupnoMesta);
+
+    $slobodna = array_diff($svaMesta, $zauzeta, $zakljucana);
+
+    return response()->json([
+        'let_id' => $letId,
+        'slobodna_sedista' => array_values($slobodna),
+    ]);
+}
+
+
 }

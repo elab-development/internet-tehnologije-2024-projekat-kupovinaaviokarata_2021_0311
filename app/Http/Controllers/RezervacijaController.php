@@ -11,64 +11,77 @@ use Illuminate\Support\Facades\Log;
 class RezervacijaController extends Controller
 {
     public function store(Request $request)
-    {
-        try {
-            $validated = $request->validate([
-                'ime_putnika'   => 'required|string',
-                'email'         => 'required|email',
-                'broj_sedista'  => 'required|integer',
-                'let_id'        => 'required|exists:lets,id',
-                'broj_karata'   => 'required|integer|min:1',
-            ]);
+    
+      {
+    try {
+        $validated = $request->validate([
+            'ime_putnika'    => 'required|string',
+            'email'          => 'required|email',
+            'broj_sedista'   => 'required|array|min:1',
+            'broj_sedista.*' => 'integer|distinct',
+            'let_id'         => 'required|exists:lets,id',
+            'broj_karata'    => 'required|integer|min:1',
+        ]);
 
-            $let = Let::findOrFail($validated['let_id']);
+        $let = Let::findOrFail($validated['let_id']);
 
-            if ($validated['broj_sedista'] > $let->broj_mesta) {
-                return response()->json([
-                    'error' => 'Uneti broj sedišta premašuje kapacitet leta.'
-                ], 400);
-            }
+        if (count($validated['broj_sedista']) !== $validated['broj_karata']) {
+            return response()->json([
+                'error' => 'Broj sedišta mora odgovarati broju karata.'
+            ], 400);
+        }
 
-          
+        $rezervacije = DB::transaction(function () use ($validated, $let, $request) {
+            $rezs = [];
 
-            $rezervacija = DB::transaction(function () use ($validated, $let, $request) {
-
+            foreach ($validated['broj_sedista'] as $seat) {
                 $zauzeto = Rezervacija::where('let_id', $validated['let_id'])
-                    ->where('broj_sedista', $validated['broj_sedista'])
+                    ->where('broj_sedista', $seat)
                     ->lockForUpdate()
                     ->exists();
 
                 if ($zauzeto) {
-                    throw new \Exception('Sedište je već rezervisano za ovaj let.');
+                    throw new \Exception("Sedište $seat je već rezervisano.");
                 }
 
                 $lock = \App\Models\LockedSeat::where('let_id', $validated['let_id'])
-                    ->where('broj_sedista', $validated['broj_sedista'])
+                    ->where('broj_sedista', $seat)
                     ->where('locked_until', '>', now())
                     ->first();
 
                 if (!$lock) {
-                    throw new \Exception('Sedište nije zaključano ili je lock istekao.');
+                    throw new \Exception("Sedište $seat nije zaključano ili je lock istekao.");
                 }
 
                 $lock->delete();
 
-                 $validated['user_id'] = $request->user()->id;
-                 $validated['ukupna_cena'] = $let->cena * $validated['broj_karata'];
+                $rez = Rezervacija::create([
+                    'ime_putnika'  => $validated['ime_putnika'],
+                    'email'        => $validated['email'],
+                    'broj_sedista' => $seat,
+                    'let_id'       => $validated['let_id'],
+                    'user_id'      => $request->user()->id,
+                    'broj_karata'  => 1,
+                    'ukupna_cena'  => $let->cena, 
+                ]);
 
-                return Rezervacija::create($validated);
-            });
+                $rezs[] = $rez;
+            }
 
-            $rezervacija->load('let', 'user');
+            return $rezs;
+        });
 
-            return response()->json($rezervacija, 201);
+        return response()->json([
+            'message' => 'Rezervacije uspešno kreirane',
+            'rezervacije' => $rezervacije
+        ], 201);
 
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage(),
-            ], 400);
-        }
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => $e->getMessage(),
+        ], 400);
     }
+}
 
     public function index(Request $request)
     {

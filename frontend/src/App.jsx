@@ -2,6 +2,8 @@ import React from "react";
 import Reservation from "./pages/Reservation"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+import Success from "./pages/Success";
+
 import Header from "./components/Layout/Header";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
@@ -22,6 +24,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/rezervacija/:id" element={<Reservation />} />
+          <Route path="/" element={<Reservation />} />
+         <Route path="/success" element={<Success />} />
         </Routes>
       </Router>
     </AuthProvider>

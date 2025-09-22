@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -14,7 +15,7 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate("/"); // posle login-a vodi na home
+      navigate("/"); 
     } catch (err) {
       setError("Neuspešna prijava. Proverite podatke.");
     }
@@ -42,6 +43,15 @@ const Login = () => {
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
           Uloguj se
         </button>
+
+<p className="mt-4 text-center">
+  Nemate nalog?{" "}
+  <Link to="/register" className="text-blue-600 hover:underline">
+    Registrujte se
+  </Link>
+</p>
+
+
       </form>
     </div>
   );
