@@ -11,7 +11,7 @@ class RezervacijaSeeder extends Seeder
 {
     public function run()
     {
-        $user = User::where('role', 'user')->first(); // uzme test user-a
+        $user = User::where('role', 'user')->first(); 
         $let = Let::first();
 
         if ($user && $let) {
