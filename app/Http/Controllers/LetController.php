@@ -27,7 +27,7 @@ class LetController extends Controller
     $query->orderBy($sortBy, $sortDir);
 
     
-    $perPage = $request->get('per_page', 10);
+    $perPage = $request->get('per_page', 100);
     $letovi = $query->paginate($perPage);
 
     return response()->json([
