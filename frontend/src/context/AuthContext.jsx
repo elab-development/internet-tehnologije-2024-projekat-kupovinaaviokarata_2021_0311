@@ -16,7 +16,6 @@ export const AuthProvider = ({ children }) => {
       setUser(JSON.parse(storedUser));
       setToken(storedToken);
 
-      // svaka axios request automatski šalje token
       api.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
     }
     setLoading(false);
@@ -34,7 +33,6 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
 
-      // od sada svaki request šalje token
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
       return user;
