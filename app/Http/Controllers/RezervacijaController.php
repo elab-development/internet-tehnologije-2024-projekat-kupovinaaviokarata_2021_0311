@@ -10,30 +10,21 @@ use Illuminate\Support\Facades\Log;
 
 class RezervacijaController extends Controller
 {
-    public function store(Request $request)
-    
-      {
+public function store(Request $request)
+{
     try {
         $validated = $request->validate([
-            'ime_putnika'    => 'required|string',
-            'email'          => 'required|email',
-            'broj_sedista'   => 'required|array|min:1',
+            'ime_putnika' => 'required|string',
+            'email' => 'required|email',
+            'broj_sedista' => 'required|array|min:1',
             'broj_sedista.*' => 'integer|distinct',
-            'let_id'         => 'required|exists:lets,id',
-            'broj_karata'    => 'required|integer|min:1',
+            'let_id' => 'required|exists:lets,id',
         ]);
 
         $let = Let::findOrFail($validated['let_id']);
 
-        if (count($validated['broj_sedista']) !== $validated['broj_karata']) {
-            return response()->json([
-                'error' => 'Broj sedišta mora odgovarati broju karata.'
-            ], 400);
-        }
-
         $rezervacije = DB::transaction(function () use ($validated, $let, $request) {
             $rezs = [];
-
             foreach ($validated['broj_sedista'] as $seat) {
                 $zauzeto = Rezervacija::where('let_id', $validated['let_id'])
                     ->where('broj_sedista', $seat)
@@ -44,30 +35,18 @@ class RezervacijaController extends Controller
                     throw new \Exception("Sedište $seat je već rezervisano.");
                 }
 
-                $lock = \App\Models\LockedSeat::where('let_id', $validated['let_id'])
-                    ->where('broj_sedista', $seat)
-                    ->where('locked_until', '>', now())
-                    ->first();
-
-                if (!$lock) {
-                    throw new \Exception("Sedište $seat nije zaključano ili je lock istekao.");
-                }
-
-                $lock->delete();
-
                 $rez = Rezervacija::create([
-                    'ime_putnika'  => $validated['ime_putnika'],
-                    'email'        => $validated['email'],
+                    'ime_putnika' => $validated['ime_putnika'],
+                    'email' => $validated['email'],
                     'broj_sedista' => $seat,
-                    'let_id'       => $validated['let_id'],
-                    'user_id'      => $request->user()->id,
-                    'broj_karata'  => 1,
-                    'ukupna_cena'  => $let->cena, 
+                    'let_id' => $validated['let_id'],
+                    'user_id' => $request->user()->id,
+                    'broj_karata' => 1,
+                    'ukupna_cena' => $let->cena, 
                 ]);
 
                 $rezs[] = $rez;
             }
-
             return $rezs;
         });
 
@@ -78,7 +57,7 @@ class RezervacijaController extends Controller
 
     } catch (\Exception $e) {
         return response()->json([
-            'error' => $e->getMessage(),
+            'error' => $e->getMessage()
         ], 400);
     }
 }

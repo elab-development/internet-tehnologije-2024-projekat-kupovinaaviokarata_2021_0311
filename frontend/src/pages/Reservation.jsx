@@ -17,6 +17,9 @@ const Reservation = () => {
   const [brojKarata, setBrojKarata] = useState(1);
   const [randomSeats, setRandomSeats] = useState(false);
   const [error, setError] = useState("");
+  
+  const ukupnaCena = letInfo ? letInfo.cena * brojKarata : 0;
+
 
   useEffect(() => {
     if (!user) return;
@@ -126,6 +129,11 @@ const handleSubmit = async (e) => {
           onChange={(e) => setBrojKarata(Number(e.target.value))}
           required
         />
+
+        
+<p className="text-lg font-semibold">
+  Ukupna cena: {letInfo?.cena * brojKarata} €
+</p>
 
         <label className="flex items-center space-x-2">
           <input

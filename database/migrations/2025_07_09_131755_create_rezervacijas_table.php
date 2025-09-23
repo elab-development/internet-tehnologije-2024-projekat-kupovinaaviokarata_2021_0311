@@ -15,6 +15,10 @@ return new class extends Migration
         $table->id();
         $table->string('ime_putnika');
         $table->string('email');
+       // $table->json('broj_sedista')->nullable();
+
+
+
         $table->integer('broj_sedista');
 
         $table->foreignId('let_id')->constrained('lets')->onDelete('cascade');
