@@ -6,7 +6,18 @@ const UserMenu = () => {
   const { user, logout } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
-  if (!user) return null; 
+  if (!user) {
+    return (
+      <div className="flex items-center space-x-4">
+        <Link to="/login" className="text-blue-600 hover:underline">
+          Prijava
+        </Link>
+        <Link to="/register" className="text-blue-600 hover:underline">
+          Registracija
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="relative inline-block text-left">
