@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Breadcrumbs = ({ items }) => {
+const Breadcrumbs = ({ items = [] }) => {
+ 
   return (
     <nav className="text-sm mb-4">
       <ol className="flex text-gray-600 space-x-2">

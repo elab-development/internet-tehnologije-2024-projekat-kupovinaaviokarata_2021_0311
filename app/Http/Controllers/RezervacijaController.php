@@ -108,9 +108,11 @@ public function store(Request $request)
 
         $query->orderBy($sortBy, $sortDir);
 
-        $rez = $query->paginate($perPage)->appends($request->query());
+$rez = $query->paginate($perPage)->appends($request->query());
 
-        return response()->json([
+
+
+      return response()->json([
             'data' => $rez->items(),
             'meta' => [
                 'current_page' => $rez->currentPage(),
@@ -126,7 +128,7 @@ public function store(Request $request)
                 'prev'  => $rez->previousPageUrl(),
                 'next'  => $rez->nextPageUrl(),
             ],
-        ]);
+        ]); 
     }
 
     public function show($id, Request $request)
