@@ -12,7 +12,7 @@ const Header = () => {
         Veloro AvioKarte
       </Link>
 
-      
+<Link to="/kontakt" className="hover:underline">Kontakt</Link>
         <UserMenu />
     </header>
   );

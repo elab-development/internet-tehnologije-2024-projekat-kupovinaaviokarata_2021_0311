@@ -11,6 +11,8 @@ import FlightDetails from "./pages/FlightDetails";
 import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Contact from "./pages/Contact";
+
 import Profile from "./pages/Profile";
 
 function App() {
@@ -28,6 +30,8 @@ function App() {
           <Route path="/" element={<Reservation />} />
          <Route path="/success" element={<Success />} />
          <Route path="/profil" element={<Profile />} />
+         <Route path="/kontakt" element={<Contact />} />
+
         </Routes>
       </Router>
     </AuthProvider>
