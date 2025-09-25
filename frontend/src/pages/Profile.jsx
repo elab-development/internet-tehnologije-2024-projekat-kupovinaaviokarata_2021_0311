@@ -73,6 +73,8 @@ const Profile = () => {
             <li key={rez.id} className="border p-4 rounded shadow">
               <FlightCard flight={rez.let} />
               <div className="mt-2 ml-4">
+                  <p><strong>Ime putnika:</strong> {rez.ime_putnika}</p>
+
                 <p><strong>Sedište:</strong> {rez.broj_sedista}</p>
                 <p><strong>Broj karata:</strong> {rez.broj_karata}</p>
                 <p><strong>Ukupna cena:</strong> {parseFloat(rez.ukupna_cena).toFixed(2)} RSD</p>
