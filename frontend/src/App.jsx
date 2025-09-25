@@ -12,7 +12,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Contact from "./pages/Contact";
-
+import About from "./pages/About";
 import Profile from "./pages/Profile";
 
 function App() {
@@ -31,6 +31,7 @@ function App() {
          <Route path="/success" element={<Success />} />
          <Route path="/profil" element={<Profile />} />
          <Route path="/kontakt" element={<Contact />} />
+         <Route path="/o-nama" element={<About />} />
 
         </Routes>
       </Router>

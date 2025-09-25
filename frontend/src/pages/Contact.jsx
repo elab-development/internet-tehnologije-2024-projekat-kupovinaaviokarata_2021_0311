@@ -9,9 +9,9 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
- 
+
     setSuccessMsg("Hvala! Vaša poruka je uspešno poslata. Kontaktiraćemo Vas u najkraćem roku.");
-    
+
     setIme("");
     setEmail("");
     setTema("");
@@ -78,6 +78,7 @@ const Contact = () => {
           Pošalji poruku
         </button>
       </form>
+
 
       <div className="mt-6 text-sm text-gray-600">
         <p>

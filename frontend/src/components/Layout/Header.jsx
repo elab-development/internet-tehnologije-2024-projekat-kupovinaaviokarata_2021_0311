@@ -13,6 +13,8 @@ const Header = () => {
       </Link>
 
 <Link to="/kontakt" className="hover:underline">Kontakt</Link>
+<Link to="/o-nama" className="hover:underline">O nama</Link>
+
         <UserMenu />
     </header>
   );
