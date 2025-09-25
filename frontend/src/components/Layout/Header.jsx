@@ -14,7 +14,7 @@ const Header = () => {
 
 <Link to="/kontakt" className="hover:underline">Kontakt</Link>
 <Link to="/o-nama" className="hover:underline">O nama</Link>
-
+<Link to="/faq" className="hover:underline">FAQ</Link>
         <UserMenu />
     </header>
   );

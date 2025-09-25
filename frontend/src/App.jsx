@@ -1,9 +1,8 @@
 import React from "react";
 import Reservation from "./pages/Reservation"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import Success from "./pages/Success";
-
+import Faq from "./pages/Faq";
 import Header from "./components/Layout/Header";
 import Home from "./pages/Home";
 import SearchResults from "./pages/SearchResults";
@@ -32,6 +31,8 @@ function App() {
          <Route path="/profil" element={<Profile />} />
          <Route path="/kontakt" element={<Contact />} />
          <Route path="/o-nama" element={<About />} />
+         <Route path="/faq" element={<Faq />} />
+
 
         </Routes>
       </Router>
