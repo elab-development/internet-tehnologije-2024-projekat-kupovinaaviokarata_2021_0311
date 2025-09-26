@@ -13,6 +13,9 @@ import Register from "./pages/Register";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
+import Footer from "./components/Layout/Footer";
+import AdminPanel from "./pages/AdminPanel";
+
 
 function App() {
   return (
@@ -32,9 +35,12 @@ function App() {
          <Route path="/kontakt" element={<Contact />} />
          <Route path="/o-nama" element={<About />} />
          <Route path="/faq" element={<Faq />} />
+         <Route path="/admin" element={<AdminPanel />} />
+
 
 
         </Routes>
+          <Footer />
       </Router>
     </AuthProvider>
   );
