@@ -36,32 +36,32 @@ const Home = () => {
     <>
   <Hero />
 
-      <div className="max-w-2xl mx-auto mt-10">
-        <h1 className="text-3xl font-bold mb-6 text-center">Kupovina avio karata</h1>
-        <Card>
-          <Input
-            label="Polazna destinacija"
-            placeholder="Unesite polaznu destinaciju"
-            value={polazna}
-            onChange={(e) => setPolazna(e.target.value)}
-          />
-          <Input
-            label="Odredište"
-            placeholder="Unesite odredište"
-            value={odrediste}
-            onChange={(e) => setOdrediste(e.target.value)}
-          />
-          <Input
-            label="Datum polaska (opciono)"
-            type="date"
-            value={datum}
-            onChange={(e) => setDatum(e.target.value)}
-          />
-          <Button onClick={handleSearch} className="mt-4 w-full">
-            Pretraži
-          </Button>
-        </Card>
-      </div>
+    <div id="search" className="max-w-2xl mx-auto mt-10">
+  <h1 className="text-3xl font-bold mb-6 text-center">Kupovina avio karata</h1>
+  <Card>
+    <Input
+      label="Polazna destinacija"
+      placeholder="Unesite polaznu destinaciju"
+      value={polazna}
+      onChange={(e) => setPolazna(e.target.value)}
+    />
+    <Input
+      label="Odredište"
+      placeholder="Unesite odredište"
+      value={odrediste}
+      onChange={(e) => setOdrediste(e.target.value)}
+    />
+    <Input
+      label="Datum polaska (opciono)"
+      type="date"
+      value={datum}
+      onChange={(e) => setDatum(e.target.value)}
+    />
+    <Button onClick={handleSearch} className="mt-4 w-full">
+      Pretraži
+    </Button>
+  </Card>
+</div>
     </>
   );
 };
