@@ -5,3 +5,17 @@
 html {
   scroll-behavior: smooth;
 }
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+a {
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #1e40af; 
+}
