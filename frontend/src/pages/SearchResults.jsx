@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import FlightCard from "../components/ui/FlightCard";
 import Breadcrumbs from "../components/ui/Breadcrumbs";
+import "./SearchResults.css";
 
 const SearchResults = () => {
   const location = useLocation();
@@ -16,7 +17,6 @@ const SearchResults = () => {
     (f) => f.cena >= priceFilter[0] && f.cena <= priceFilter[1]
   );
 
-
   filteredFlights = filteredFlights.sort((a, b) =>
     sortOrder === "asc" ? a.cena - b.cena : b.cena - a.cena
   );
@@ -28,7 +28,7 @@ const SearchResults = () => {
   );
 
   return (
-    <div className="max-w-3xl mx-auto mt-10">
+    <div className="search-results">
       <Breadcrumbs
         items={[
           { label: "Početna", to: "/" },
@@ -36,27 +36,25 @@ const SearchResults = () => {
         ]}
       />
 
-      <h2 className="text-2xl font-bold mb-6 text-center">Rezultati pretrage</h2>
+      <h2>Rezultati pretrage</h2>
 
-      <div className="mb-6 bg-white shadow p-4 rounded-lg">
-        <h3 className="text-lg font-semibold mb-2">Filtriraj po ceni</h3>
-        <div className="flex space-x-4 mb-4">
-          <div className="w-1/2">
-            <label className="block text-sm text-gray-600 mb-1">Cena od</label>
+      <div className="filter-box">
+        <h3>Filtriraj po ceni</h3>
+        <div className="flex-filters">
+          <div>
+            <label>Cena od</label>
             <input
               type="number"
-              className="border p-2 rounded w-full"
               value={priceFilter[0]}
               onChange={(e) =>
                 setPriceFilter([Number(e.target.value), priceFilter[1]])
               }
             />
           </div>
-          <div className="w-1/2">
-            <label className="block text-sm text-gray-600 mb-1">Cena do</label>
+          <div>
+            <label>Cena do</label>
             <input
               type="number"
-              className="border p-2 rounded w-full"
               value={priceFilter[1]}
               onChange={(e) =>
                 setPriceFilter([priceFilter[0], Number(e.target.value)])
@@ -65,9 +63,8 @@ const SearchResults = () => {
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold mb-2">Sortiraj po ceni</h3>
+        <h3>Sortiraj po ceni</h3>
         <select
-          className="border rounded-lg p-2 w-full"
           value={sortOrder}
           onChange={(e) => setSortOrder(e.target.value)}
         >
@@ -77,37 +74,33 @@ const SearchResults = () => {
       </div>
 
       {displayedFlights.length === 0 ? (
-        <p className="text-center text-gray-600">Nema letova</p>
+        <p className="no-results">Nema letova za zadate kriterijume</p>
       ) : (
-        <ul className="space-y-4">
+        <div className="results-list">
           {displayedFlights.map((letData) => (
-            <li key={letData.id}>
-              <FlightCard flight={letData} />
-            </li>
+            <FlightCard key={letData.id} flight={letData} />
           ))}
-        </ul>
+        </div>
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-between items-center mt-6">
+        <div className="pagination">
           <button
             disabled={page === 1}
             onClick={() => setPage(page - 1)}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
           >
-            Prethodna
+            ⬅ Prethodna
           </button>
 
-          <span className="text-sm">
+          <span>
             Stranica {page} od {totalPages}
           </span>
 
           <button
             disabled={page === totalPages}
             onClick={() => setPage(page + 1)}
-            className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
           >
-            Sledeća
+            Sledeća ➡
           </button>
         </div>
       )}
