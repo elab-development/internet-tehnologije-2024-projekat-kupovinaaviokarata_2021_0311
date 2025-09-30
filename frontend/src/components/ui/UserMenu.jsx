@@ -1,6 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
+import { FaUserCircle, FaSignOutAlt, FaUser } from "react-icons/fa";
+import "./UserMenu.css";
 
 const UserMenu = () => {
   const { user, logout } = useContext(AuthContext);
@@ -8,48 +10,43 @@ const UserMenu = () => {
 
   if (!user) {
     return (
-      <div className="flex items-center space-x-4">
-        <Link to="/login" className="text-blue-600 hover:underline">
+      <div className="flex items-center space-x-3">
+        <Link to="/login" className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition">
           Prijava
         </Link>
-        <Link to="/register" className="text-blue-600 hover:underline">
+        <Link to="/register" className="px-3 py-1 rounded border border-blue-600 text-blue-600 hover:bg-blue-50 transition">
           Registracija
         </Link>
       </div>
     );
   }
 
-  return (
-    <div className="relative inline-block text-left">
-      <button
-        onClick={() => setOpen(!open)}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-      >
-        {user.name}
-      </button>
+return (
+  <div className="user-menu-wrapper">
+    <button onClick={() => setOpen(!open)} className="user-menu-btn">
+      <FaUserCircle className="text-lg mr-2" />
+      {user.name}
+    </button>
 
-      {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
-          <Link
-            to="/profil"
-            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-            onClick={() => setOpen(false)}
-          >
-            Moj profil
-          </Link>
-          <button
-            onClick={() => {
-              logout();
-              setOpen(false);
-            }}
-            className="w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-100"
-          >
-            Odjavi se
-          </button>
-        </div>
-      )}
-    </div>
-  );
+    {open && (
+      <div className="user-menu-dropdown">
+        <Link to="/profil" className="user-menu-item" onClick={() => setOpen(false)}>
+          <FaUser /> Moj profil
+        </Link>
+        <button
+          onClick={() => {
+            logout();
+            setOpen(false);
+          }}
+          className="user-menu-item w-full text-left"
+        >
+          <FaSignOutAlt /> Odjavi se
+        </button>
+      </div>
+    )}
+  </div>
+);
+
 };
 
 export default UserMenu;
