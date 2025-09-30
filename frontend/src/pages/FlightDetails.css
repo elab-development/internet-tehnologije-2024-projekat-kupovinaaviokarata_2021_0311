@@ -1,0 +1,64 @@
+.flight-details-container {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.flight-details-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.flight-details-card h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  color: #1e3a8a;
+}
+
+.flight-details-card p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.flight-details-card strong {
+  color: #000;
+}
+
+.price {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 15px;
+  color: #2563eb;
+}
+
+.reserve-button {
+  margin-top: 25px;
+  padding: 14px 22px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #38bdf8, #6791eb);
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+.reserve-button:hover {
+  transform: scale(1.05);
+  background: linear-gradient(to right, #2563eb, #1e40af);
+}
+
+.loading,
+.error {
+  text-align: center;
+  margin-top: 40px;
+  color: #666;
+  font-size: 18px;
+}

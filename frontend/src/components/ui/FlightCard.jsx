@@ -21,10 +21,11 @@ const FlightCard = ({ flight }) => {
       <div className="price">{flight.cena} €</div>
 
       <Link to={`/letovi/${flight.id}`}>
-        <button>Pogledaj detalje</button>
+        <button>Pogledaj detalje ✈️</button>
       </Link>
     </div>
   );
 };
 
 export default FlightCard;
+
