@@ -1,0 +1,58 @@
+/* Pozicija forme */
+.search-wrapper {
+  max-width: 700px;
+  margin: -80px auto 40px auto; /* blagi overlap preko hero sekcije */
+  position: relative;
+  z-index: 10;
+}
+
+.search-card {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e5e7eb;
+}
+
+.search-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333;
+}
+
+.search-card input {
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.search-card input:focus {
+  outline: none;
+  border-color: #6791eb; 
+  box-shadow: 0 0 6px rgba(103, 145, 235, 0.6);
+}
+
+.search-button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(to right, #38bdf8, #6791eb); 
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  transform: scale(1.03);
+  background: linear-gradient(to right, #2baed8, #577fe0);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}

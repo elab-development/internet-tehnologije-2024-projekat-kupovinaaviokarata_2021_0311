@@ -2,11 +2,10 @@ import React from "react";
 
 const Card = ({ children, className = "" }) => {
   return (
-    <div
-      className={`p-4 bg-white shadow-md rounded-xl border hover:shadow-lg hover:-translate-y-1 transition duration-300 ${className}`}
-    >
-      {children}
-    </div>
+  <div className={`p-6 bg-white/80 backdrop-blur-md shadow-lg rounded-2xl border ${className}`}>
+  {children}
+</div>
+
   );
 };
 
