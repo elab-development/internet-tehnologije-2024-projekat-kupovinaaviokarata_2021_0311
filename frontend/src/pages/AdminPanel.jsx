@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContext";
 import Breadcrumbs from "../components/ui/Breadcrumbs";
+import "./AdminPanel.css";
 
 const AdminPanel = () => {
   const { user, token } = useContext(AuthContext);
@@ -97,149 +98,86 @@ const AdminPanel = () => {
   if (loading) return <p>Učitavanje...</p>;
 
   return (
-    <div className="max-w-6xl mx-auto mt-10">
-      <Breadcrumbs
-        items={[
-          { label: "Početna", to: "/" },
-          { label: "Admin Panel" },
-        ]}
-      />
-      <h2 className="text-3xl font-bold mb-6">Admin Panel</h2>
+    <div className="admin-container">
+      <Breadcrumbs items={[{ label: "Početna", to: "/" }, { label: "Admin Panel" }]} />
+      <h2 className="admin-title">Admin Panel</h2>
 
-      <h3 className="text-xl font-semibold mt-6 mb-4">Dodaj novi let</h3>
-      <form onSubmit={handleAddFlight} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-        <input
-          type="text"
-          placeholder="Broj leta"
-          className="border p-2 rounded"
-          value={newFlight.broj_leta}
-          onChange={(e) => setNewFlight({ ...newFlight, broj_leta: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Polazište"
-          className="border p-2 rounded"
-          value={newFlight.polaziste}
-          onChange={(e) => setNewFlight({ ...newFlight, polaziste: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Odredište"
-          className="border p-2 rounded"
-          value={newFlight.odrediste}
-          onChange={(e) => setNewFlight({ ...newFlight, odrediste: e.target.value })}
-          required
-        />
-        <input
-          type="datetime-local"
-          placeholder="Vreme poletanja"
-          className="border p-2 rounded"
-          value={newFlight.vreme_poletanja}
-          onChange={(e) => setNewFlight({ ...newFlight, vreme_poletanja: e.target.value })}
-          required
-        />
-        <input
-          type="datetime-local"
-          placeholder="Vreme sletanja"
-          className="border p-2 rounded"
-          value={newFlight.vreme_sletanja}
-          onChange={(e) => setNewFlight({ ...newFlight, vreme_sletanja: e.target.value })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Cena (€)"
-          className="border p-2 rounded"
-          value={newFlight.cena}
-          onChange={(e) => setNewFlight({ ...newFlight, cena: e.target.value })}
-          required
-        />
-        <input
-          type="number"
-          placeholder="Broj mesta"
-          className="border p-2 rounded"
-          value={newFlight.broj_mesta}
-          onChange={(e) => setNewFlight({ ...newFlight, broj_mesta: e.target.value })}
-          required
-        />
-        <button
-          type="submit"
-          className="md:col-span-2 bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
-          Dodaj let
-        </button>
-      </form>
+      <div className="admin-card">
+        <h3 className="section-title">Dodaj novi let</h3>
+        <form onSubmit={handleAddFlight} className="admin-form">
+          <input type="text" placeholder="Broj leta" value={newFlight.broj_leta}
+            onChange={(e) => setNewFlight({ ...newFlight, broj_leta: e.target.value })} required />
+          <input type="text" placeholder="Polazište" value={newFlight.polaziste}
+            onChange={(e) => setNewFlight({ ...newFlight, polaziste: e.target.value })} required />
+          <input type="text" placeholder="Odredište" value={newFlight.odrediste}
+            onChange={(e) => setNewFlight({ ...newFlight, odrediste: e.target.value })} required />
+          <input type="datetime-local" value={newFlight.vreme_poletanja}
+            onChange={(e) => setNewFlight({ ...newFlight, vreme_poletanja: e.target.value })} required />
+          <input type="datetime-local" value={newFlight.vreme_sletanja}
+            onChange={(e) => setNewFlight({ ...newFlight, vreme_sletanja: e.target.value })} required />
+          <input type="number" placeholder="Cena (€)" value={newFlight.cena}
+            onChange={(e) => setNewFlight({ ...newFlight, cena: e.target.value })} required />
+          <input type="number" placeholder="Broj mesta" value={newFlight.broj_mesta}
+            onChange={(e) => setNewFlight({ ...newFlight, broj_mesta: e.target.value })} required />
+          <button type="submit" className="btn-primary">Dodaj let</button>
+        </form>
+      </div>
 
-      <h3 className="text-xl font-semibold mt-6 mb-4">Svi letovi</h3>
-      <table className="w-full border mb-6">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Broj leta</th>
-            <th className="border p-2">Polazište</th>
-            <th className="border p-2">Odredište</th>
-            <th className="border p-2">Cena</th>
-            <th className="border p-2">Akcije</th>
-          </tr>
-        </thead>
-        <tbody>
-          {flights.map((f) => (
-            <tr key={f.id}>
-              <td className="border p-2">{f.id}</td>
-              <td className="border p-2">{f.broj_leta}</td>
-              <td className="border p-2">{f.polaziste}</td>
-              <td className="border p-2">{f.odrediste}</td>
-              <td className="border p-2">{f.cena}€</td>
-              <td className="border p-2 text-center">
-                <button
-                  onClick={() => handleDeleteFlight(f.id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                >
-                  Obriši
-                </button>
-              </td>
+      <div className="admin-card">
+        <h3 className="section-title">Svi letovi</h3>
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Broj leta</th><th>Polazište</th><th>Odredište</th><th>Cena</th><th>Akcije</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {flights.map((f) => (
+              <tr key={f.id}>
+                <td>{f.id}</td>
+                <td>{f.broj_leta}</td>
+                <td>{f.polaziste}</td>
+                <td>{f.odrediste}</td>
+                <td>{f.cena} €</td>
+                <td>
+                  <button onClick={() => handleDeleteFlight(f.id)} className="btn-danger">
+                    Obriši
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
-      <h3 className="text-xl font-semibold mb-4">Sve rezervacije</h3>
-      <table className="w-full border">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="border p-2">ID</th>
-            <th className="border p-2">Ime putnika</th>
-            <th className="border p-2">Let</th>
-            <th className="border p-2">Sedište</th>
-            <th className="border p-2">Email</th>
-            <th className="border p-2">Akcije</th>
-          </tr>
-        </thead>
-        <tbody>
-          {reservations.map((rez) => (
-            <tr key={rez.id}>
-              <td className="border p-2">{rez.id}</td>
-              <td className="border p-2">{rez.ime_putnika}</td>
-              <td className="border p-2">{rez.let?.broj_leta}</td>
-              <td className="border p-2">{rez.broj_sedista}</td>
-              <td className="border p-2">{rez.email}</td>
-              <td className="border p-2 text-center">
-                <button
-                  onClick={() => handleDeleteReservation(rez.id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                >
-                  Obriši
-                </button>
-              </td>
+      <div className="admin-card">
+        <h3 className="section-title">Sve rezervacije</h3>
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Ime putnika</th><th>Let</th><th>Sedište</th><th>Email</th><th>Akcije</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {reservations.map((rez) => (
+              <tr key={rez.id}>
+                <td>{rez.id}</td>
+                <td>{rez.ime_putnika}</td>
+                <td>{rez.let?.broj_leta}</td>
+                <td>{rez.broj_sedista}</td>
+                <td>{rez.email}</td>
+                <td>
+                  <button onClick={() => handleDeleteReservation(rez.id)} className="btn-danger">
+                    Obriši
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
 export default AdminPanel;
-
