@@ -15,12 +15,13 @@ import About from "./pages/About";
 import Profile from "./pages/Profile";
 import Footer from "./components/Layout/Footer";
 import AdminPanel from "./pages/AdminPanel";
-
+import ScrollToTop from "./components/Layout/ScrollToTop";
 
 function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
