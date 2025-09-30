@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Breadcrumbs from "../components/ui/Breadcrumbs";
+import "./Contact.css";
+
 
 const Contact = () => {
   const [ime, setIme] = useState("");
@@ -19,77 +22,40 @@ const Contact = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Kontakt</h1>
+  <div className="contact-container">
+    <div className="contact-card">
+      <Breadcrumbs
+        items={[
+          { label: "Početna", to: "/" },
+          { label: "Kontakt" }
+        ]}
+      />
 
-      <p className="text-gray-600 mb-6">
-        Dobrodošli na stranicu za kontakt podrške.  
-        Ako imate pitanja u vezi sa rezervacijama, povratnim kartama ili problemima u aplikaciji –
-        pošaljite nam poruku i naš tim podrške će vas kontaktirati u najkraćem mogućem roku.  
+      <h1 className="contact-title">Kontakt</h1>
+      <p className="contact-desc">
+        Dobrodošli na stranicu za kontakt podrške. Ako imate pitanja u vezi sa rezervacijama, povratnim kartama ili problemima u aplikaciji – pošaljite nam poruku i naš tim podrške će vas kontaktirati u najkraćem mogućem roku.  
         Radno vreme korisničke podrške je radnim danima od 9 do 17h.
       </p>
 
-      {successMsg && (
-        <div className="mb-4 p-3 rounded bg-green-100 text-green-700">
-          {successMsg}
-        </div>
-      )}
+      {successMsg && <div className="contact-success">{successMsg}</div>}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          className="w-full border p-2 rounded"
-          placeholder="Ime i prezime"
-          value={ime}
-          onChange={(e) => setIme(e.target.value)}
-          required
-        />
+      <form onSubmit={handleSubmit} className="contact-form">
+        <input type="text" placeholder="Ime i prezime" className="contact-input" value={ime} onChange={(e) => setIme(e.target.value)} required />
+        <input type="email" placeholder="Email" className="contact-input" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="text" placeholder="Tema poruke (Rezervacija, Povratna karta, Tehnička pomoć...)" className="contact-input" value={tema} onChange={(e) => setTema(e.target.value)} required />
+        <textarea placeholder="Detaljno opišite problem ili pitanje..." className="contact-textarea" value={poruka} onChange={(e) => setPoruka(e.target.value)} required />
 
-        <input
-          type="email"
-          className="w-full border p-2 rounded"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        <input
-          type="text"
-          className="w-full border p-2 rounded"
-          placeholder="Tema poruke (Rezervacija, Povratna karta, Tehnička pomoć...)"
-          value={tema}
-          onChange={(e) => setTema(e.target.value)}
-          required
-        />
-
-        <textarea
-          className="w-full border p-2 rounded min-h-[140px]"
-          placeholder="Detaljno opišite problem ili pitanje..."
-          value={poruka}
-          onChange={(e) => setPoruka(e.target.value)}
-          required
-        />
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
-          Pošalji poruku
-        </button>
+        <button type="submit" className="contact-btn">Pošalji poruku</button>
       </form>
 
-
-      <div className="mt-6 text-sm text-gray-600">
-        <p>
-          📧 Kontakt email: <span className="font-medium">support@aviokarte.app</span>
-        </p>
-        <p>
-          🕘 Radno vreme podrške: <span className="font-medium">09–17h (radnim danima)</span>
-        </p>
+      <div className="contact-info">
+        <p>📧 Kontakt email: <span>support@aviokarte.app</span></p>
+        <p>🕘 Radno vreme podrške: <span>09–17h (radnim danima)</span></p>
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Contact;
