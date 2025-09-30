@@ -29,7 +29,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/rezervacija/:id" element={<Reservation />} />
-          <Route path="/" element={<Reservation />} />
          <Route path="/success" element={<Success />} />
          <Route path="/profil" element={<Profile />} />
          <Route path="/kontakt" element={<Contact />} />
