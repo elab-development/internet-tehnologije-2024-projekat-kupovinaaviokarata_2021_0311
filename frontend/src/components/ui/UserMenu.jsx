@@ -8,18 +8,18 @@ const UserMenu = () => {
   const { user, logout } = useContext(AuthContext);
   const [open, setOpen] = useState(false);
 
-  if (!user) {
-    return (
-      <div className="flex items-center space-x-3">
-        <Link to="/login" className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition">
-          Prijava
-        </Link>
-        <Link to="/register" className="px-3 py-1 rounded border border-blue-600 text-blue-600 hover:bg-blue-50 transition">
-          Registracija
-        </Link>
-      </div>
-    );
-  }
+if (!user) {
+  return (
+    <div className="flex items-center space-x-3">
+      <Link to="/login" className="user-auth-btn primary">
+        Prijava
+      </Link>
+      <Link to="/register" className="user-auth-btn secondary">
+        Registracija
+      </Link>
+    </div>
+  );
+}
 
 return (
   <div className="user-menu-wrapper">

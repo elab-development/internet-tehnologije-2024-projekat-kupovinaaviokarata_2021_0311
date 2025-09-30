@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { Link } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -15,47 +15,45 @@ const Login = () => {
     e.preventDefault();
     try {
       await login(email, password);
-      navigate("/"); 
+      navigate("/");
     } catch (err) {
       setError("Neuspešna prijava. Proverite podatke.");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Prijava</h2>
-      {error && <p className="text-red-500">{error}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-2 rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Lozinka"
-          className="w-full border p-2 rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
-          Uloguj se
-        </button>
+    <div className="login-container">
+      <div className="login-card">
+        <h2 className="login-title">Prijava</h2>
+{error && <div className="alert alert-error">{error}</div>}
+        
+        <form onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Email"
+            className="login-input"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Lozinka"
+            className="login-input"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit" className="login-btn">
+            Uloguj se
+          </button>
+        </form>
 
-<p className="mt-4 text-center">
-  Nemate nalog?{" "}
-  <Link to="/register" className="text-blue-600 hover:underline">
-    Registrujte se
-  </Link>
-</p>
-
-
-      </form>
+        <p className="login-footer">
+          Nemate nalog?{" "}
+          <Link to="/register">Registrujte se</Link>
+        </p>
+      </div>
     </div>
   );
 };
-
 
 export default Login;
