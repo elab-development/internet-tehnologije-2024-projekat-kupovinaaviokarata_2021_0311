@@ -108,3 +108,40 @@
   font-weight: 500;
   color: #444;
 }
+
+.price-highlight {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 15px 0;
+  text-align: center;
+  color: #1e3a8a;
+}
+
+.price-highlight span {
+  color: #2563eb;
+  font-size: 22px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  padding: 10px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.checkbox-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #2563eb; 
+  cursor: pointer;
+}
+
+.checkbox-row label {
+  font-size: 15px;
+  color: #333;
+  cursor: pointer;
+}
