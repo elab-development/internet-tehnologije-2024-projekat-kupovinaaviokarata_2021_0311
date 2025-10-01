@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import UserMenu from "../ui/UserMenu";
 import "./Header.css";
+import Weather from "../ui/Weather"
 
 const Header = () => {
   const { user } = useContext(AuthContext);
@@ -22,7 +23,10 @@ const Header = () => {
           {user?.role === "admin" && <Link to="/admin">Admin</Link>}
         </nav>
 
-        <UserMenu />
+      <div className="header-right">
+          <Weather city="Beograd" />
+          <UserMenu />
+        </div>
       </div>
     </header>
   );

@@ -36,6 +36,7 @@ const Home = () => {
   return (
     <>
       <Hero />
+
       <div id="search-form" className="search-wrapper">
         <Card className="search-card">
           <h2 className="search-title">Pretraži letove</h2>
