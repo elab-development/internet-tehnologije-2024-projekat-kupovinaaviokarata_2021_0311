@@ -83,27 +83,34 @@ const SearchResults = () => {
         </div>
       )}
 
-      {totalPages > 1 && (
-        <div className="pagination">
-          <button
-            disabled={page === 1}
-            onClick={() => setPage(page - 1)}
-          >
-            ⬅ Prethodna
-          </button>
+   {totalPages > 1 && (
+  <div className="pagination">
+    <button
+      disabled={page === 1}
+      onClick={() => {
+        setPage(page - 1);
+        window.scrollTo({ top: 0, behavior: "smooth" }); 
+      }}
+    >
+      ⬅ Prethodna
+    </button>
 
-          <span>
-            Stranica {page} od {totalPages}
-          </span>
+    <span>
+      Stranica {page} od {totalPages}
+    </span>
 
-          <button
-            disabled={page === totalPages}
-            onClick={() => setPage(page + 1)}
-          >
-            Sledeća ➡
-          </button>
-        </div>
-      )}
+    <button
+      disabled={page === totalPages}
+      onClick={() => {
+        setPage(page + 1);
+        window.scrollTo({ top: 0, behavior: "smooth" }); 
+      }}
+    >
+      Sledeća ➡
+    </button>
+  </div>
+)}
+
     </div>
   );
 };

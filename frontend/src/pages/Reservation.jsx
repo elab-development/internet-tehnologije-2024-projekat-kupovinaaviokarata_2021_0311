@@ -148,16 +148,17 @@ const Reservation = () => {
         setError("Morate izabrati sedišta (ili dozvoliti automatski izbor) za sve putnike (ODLAZAK).");
         return;
       }
+if (birajSedišta) {
+  for (const s of seatsOdlazak) {
+    const res = await axios.post(
+      "http://localhost:8000/api/zakljucaj-sediste",
+      { let_id: letId, broj_sedista: s },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    alert(res.data.message || "Sedište je zaključano!");
+  }
+}
 
-      if (birajSedišta) {
-        for (const s of seatsOdlazak) {
-          await axios.post(
-            "http://localhost:8000/api/zakljucaj-sediste",
-            { let_id: letId, broj_sedista: s },
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-        }
-      }
 
       
       for (let i = 0; i < brojKarata; i++) {
@@ -189,15 +190,17 @@ const Reservation = () => {
           return;
         }
 
-        if (birajSedišta) {
-          for (const s of seatsPovratak) {
-            await axios.post(
-              "http://localhost:8000/api/zakljucaj-sediste",
-              { let_id: selectedReturn.id, broj_sedista: s },
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-          }
-        }
+      if (birajSedišta) {
+  for (const s of seatsPovratak) {
+    const res = await axios.post(
+      "http://localhost:8000/api/zakljucaj-sediste",
+      { let_id: selectedReturn.id, broj_sedista: s },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    alert(res.data.message || "Sedište je zaključano!");
+  }
+}
+
 
         for (let i = 0; i < brojKarata; i++) {
           await axios.post(
